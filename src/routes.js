@@ -9,6 +9,6 @@ routes.post('/cadastro', users.registerUser);
 routes.post('/login', login);
 routes.use(auth);
 routes.get('/perfil', users.getProfile);
-routes.get('/perfil', users.updateProfile);
+routes.put('/perfil', users.updateProfile);
 
 module.exports = routes;

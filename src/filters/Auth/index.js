@@ -17,7 +17,7 @@ const auth = async (req, res, next) => {
         if(!exits) return res.status(404).json("Usuário não encontrado.");
 
         const { password, ...user } = exits;
-        req.users = user;
+        req.user = user;
 
         next();
     } catch (error) {
