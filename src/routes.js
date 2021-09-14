@@ -8,7 +8,7 @@ const routes = express();
 routes.post('/cadastro', users.registerUser);
 routes.post('/login', login);
 routes.use(auth);
-routes.get('/perfil', uusers.getProfile);
+routes.get('/perfil', users.getProfile);
 routes.get('/perfil', users.updateProfile);
 
 module.exports = routes;

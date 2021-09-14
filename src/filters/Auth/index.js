@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { default: knex } = require('knex');
+const knex = require("../../connection");
 const passwordHash = require('../../passwordHash');
 
 const auth = async (req, res, next) => {
@@ -15,7 +15,7 @@ const auth = async (req, res, next) => {
         const exits = await knex('usuarios').where({id}).first();
         
         if(!exits) return res.status(404).json("Usuário não encontrado.");
-        
+
         const { password, ...user } = exits;
         req.users = user;
 
