@@ -32,4 +32,33 @@ const createPost = async (req, res) => {
     }
 }
 
-module.exports = { createPost }
+const like = async (req, res) => {
+    const { id } = req.user;
+    const { postagemId } = req.params;
+
+    try {
+        const post = await knex('postagens').where({id: postagemId}).first();
+
+        if(!post) return res.status(404).json("Postagem não encontrada.");
+
+        const likedVerify = await knex('postagem_curtidas')
+        .where({usuario_id: id, postagem_id: postagemId})
+        .first();
+
+        if(likedVerify) return res.status(400).json("O usuário já curtiu essa postagem.");
+
+        const like = await knex('postagem_curtidas')
+        .insert({
+            usuario_id: id,
+            postagem_id: postagemId
+        })
+
+        if(!like) return res.status(404).json("Não foi possível curtir essa postagem.");
+
+        return res.status(200).json("Postagem curtida com sucesso.");
+    } catch(error) {
+        return res.status(400).json(error.message);
+    }
+}
+
+module.exports = { createPost, like }
