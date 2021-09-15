@@ -61,4 +61,31 @@ const like = async (req, res) => {
     }
 }
 
-module.exports = { createPost, like }
+const addComment = async (req, res) => {
+    const { id } = req.user;
+    const { postagemId } = req.params;
+    const { texto } = req.body;
+
+    if(!texto) return res.status(400).json("O comentário não pode ser vazio.");
+
+    try {
+        const post = await knex('postagens').where({id: postagemId}).first();
+
+        if(!post) return res.status(404).json("Postagem não encontrada.");
+
+        const comment = await knex('postagem_comentarios')
+        .insert({
+            usuario_id: id,
+            postagem_id: postagemId,
+            texto
+        });
+
+        if(!comment) return res.status(404).json("Não foi possível comentar nessa postagem.");
+
+        return res.status(200).json("Comentário enviado com sucesso.");
+    } catch(error) {
+        return res.status(400).json(error.message);
+    }
+}
+
+module.exports = { createPost, like, addComment }
